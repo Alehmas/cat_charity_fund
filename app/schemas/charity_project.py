@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from typing import Optional, Union
 from pydantic import BaseModel, Extra, Field, validator
 
 
@@ -18,14 +19,17 @@ class CharityProjectCreate(CharityProjectBase):
 
 
 class CharityProjectUpdate(CharityProjectBase):
-    pass
+    name: Optional[str](min_length=1, max_length=100)
+    description: Optional[str](min_length=1)
+    full_amount: Optional[int](gt=0)
 
 
 class CharityProjectDB(CharityProjectBase):
-    invested_amount: int = 0
-    fully_invested: bool = False
-    create_date: datetime = datetime.now().isoformat(timespec='seconds')
-    close_date: datetime = None
+    id: int
+    invested_amount: int
+    fully_invested: bool
+    create_date: datetime
+    close_date: Union[datetime, None]
 
-    # class Config:
-    #     orm_mode = True
+    class Config:
+        orm_mode = True
