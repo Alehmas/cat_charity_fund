@@ -3,14 +3,14 @@ from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.validators import check_charity_project_exists, check_name_duplicate
 from app.core.db import get_async_session
 from app.crud import (
-    create_charity_project, get_project_id_by_name, read_all_project_db,
-    update_charity_project, get_charity_project_by_id, delete_charity_project)
-from app.models import CharityProject
+    create_charity_project, read_all_project_db,
+    update_charity_project, delete_charity_project)
 from app.schemas import CharityProjectCreate, CharityProjectDB, CharityProjectUpdate
 
-router = APIRouter(prefix='/charity_project')
+router = APIRouter()
 
 
 @router.post('/', response_model=CharityProjectDB,)
@@ -20,6 +20,7 @@ async def create_new_project(
     await check_name_duplicate(project.name, session)
     new_project = await create_charity_project(project, session)
     return new_project
+
 
 @router.get('/', response_model=List[CharityProjectDB],)
 async def get_all_project(
@@ -69,30 +70,3 @@ async def remove_charity_project(
         project, session
     )
     return project
-
-
-async def check_name_duplicate(
-        project_name: str,
-        session: AsyncSession,
-) -> None:
-    project_id = await get_project_id_by_name(project_name, session)
-    if project_id is not None:
-        raise HTTPException(
-            status_code=422,
-            detail='Проект с таким именем уже существует',
-        )
-
-
-async def check_charity_project_exists(
-        project_id: int,
-        session: AsyncSession,
-) -> CharityProject:
-    charity_project = await get_charity_project_by_id(
-        project_id, session
-    )
-    if charity_project is None:
-        raise HTTPException(
-            status_code=404, 
-            detail='Проект не найден!'
-        )
-    return charity_project 

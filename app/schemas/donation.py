@@ -10,15 +10,13 @@ class DonationCreate(BaseModel):
 
     class Config:
         extra = Extra.forbid
+        orm_mode = True
 
 
 class DonationDB(DonationCreate):
     id: int
     invested_amount: int
     create_date: datetime
-
-    class Config:
-        orm_mode = True
 
 
 class DonationAllDB(DonationDB):

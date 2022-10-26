@@ -7,19 +7,19 @@ from app.models import Donation
 from app.schemas import DonationCreate
 
 
-async def create_donation(
+async def create_donation_crud(
         new_donat: DonationCreate,
         session: AsyncSession,
 ) -> Donation:
     new_donat_data = new_donat.dict()
-    db_donat = DonationCreate(**new_donat_data)
+    db_donat = Donation(**new_donat_data)
     session.add(db_donat)
     await session.commit()
     await session.refresh(db_donat)
     return db_donat
 
 
-async def get_all_donat(
+async def get_all_donat_crud(
         session: AsyncSession,
 ) -> List[Donation]:
     db_donats = await session.execute(select(Donation))
