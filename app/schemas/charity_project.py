@@ -19,9 +19,15 @@ class CharityProjectCreate(CharityProjectBase):
 
 
 class CharityProjectUpdate(CharityProjectBase):
-    name: Optional[str](min_length=1, max_length=100)
-    description: Optional[str](min_length=1)
-    full_amount: Optional[int](gt=0)
+    name: Optional[str] = Field(min_length=1, max_length=100)
+    description: Optional[str] = Field(min_length=1)
+    full_amount: Optional[int] = Field(gt=0)
+
+    @validator('name', 'description', 'full_amount')
+    def name_cannot_be_null(cls, value):
+        if value is None:
+            raise ValueError('Поле не может быть пустым!')
+        return value
 
 
 class CharityProjectDB(CharityProjectBase):
