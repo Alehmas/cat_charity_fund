@@ -16,11 +16,11 @@ async def create_charity_project(
         session: AsyncSession,
 ) -> CharityProject:
     # Конвертируем объект MeetingRoomCreate в словарь.
-    new_project_data = new_project.dict()
+    #new_project_data = new_project.dict()
     
     # Создаём объект модели MeetingRoom.
     # В параметры передаём пары "ключ=значение", для этого распаковываем словарь.
-    db_project = CharityProject(**new_project_data)
+    db_project = CharityProject(**new_project)
     session.add(db_project)
 
     # Записываем изменения непосредственно в БД. 

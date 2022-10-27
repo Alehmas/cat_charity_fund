@@ -1,15 +1,16 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.validators import check_charity_project_exists, check_name_duplicate
+from app.api.validators import check_charity_project_exists, check_name_duplicate, check_charity_project_full
 from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud import (
     create_charity_project, read_all_project_db,
     update_charity_project, delete_charity_project)
-from app.schemas import CharityProjectCreate, CharityProjectDB, CharityProjectUpdate
+from app.schemas import CharityProjectCreate, CharityProjectDB, CharityProjectUpdate, CharityProjectAll
+from app.services.services import add_free_donate
 
 router = APIRouter()
 
@@ -21,7 +22,8 @@ async def create_new_project(
         session: AsyncSession = Depends(get_async_session),):
     """Только для суперюзеров."""
     await check_name_duplicate(project.name, session)
-    new_project = await create_charity_project(project, session)
+    new_project = await add_free_donate(project, session)
+    new_project = await create_charity_project(new_project, session)
     return new_project
 
 
@@ -34,8 +36,7 @@ async def get_all_project(
 
 @router.patch(
     '/{project_id}',
-    response_model=CharityProjectDB,
-    response_model_exclude_none=True,
+    response_model=CharityProjectAll,
     dependencies=[Depends(current_superuser)],
 )
 async def partially_update_charity_project(
@@ -49,9 +50,8 @@ async def partially_update_charity_project(
     # Получаем объект из БД по ID.
     # В ответ ожидается либо None, либо объект класса MeetingRoom.
     project = await check_charity_project_exists(project_id, session)
-    if obj_in.name is not None:
-        # Если в запросе получено поле name — проверяем его на уникальность.
-        await check_name_duplicate(obj_in.name, session)
+    await check_charity_project_full(project_id, session)
+    await check_name_duplicate(obj_in.name, session)
     # Передаём в корутину все необходимые для обновления данные.
     project = await update_charity_project(
         project, obj_in, session
@@ -61,8 +61,7 @@ async def partially_update_charity_project(
 
 @router.delete(
     '/{project_id}',
-    response_model=CharityProjectDB,
-    response_model_exclude_none=True,
+    response_model=CharityProjectAll,
     dependencies=[Depends(current_superuser)],
 )
 async def remove_charity_project(

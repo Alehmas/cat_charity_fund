@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,6 +8,7 @@ from app.core.user import current_user, current_superuser
 from app.crud import create_donation_crud, get_all_donat_crud, get_donats_by_user
 from app.models import User
 from app.schemas import DonationCreate, DonationDB, DonationAllDB
+from app.services.services import add_donate_to_project
 
 router = APIRouter()
 
@@ -17,7 +18,8 @@ async def create_new_donation(
         donat: DonationCreate,
         session: AsyncSession = Depends(get_async_session),
         user: User = Depends(current_user),):
-    new_donat = await create_donation_crud(donat, session, user)
+    new_donat = await add_donate_to_project(donat, session)
+    new_donat = await create_donation_crud(new_donat, session, user)
     return new_donat
 
 

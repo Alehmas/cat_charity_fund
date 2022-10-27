@@ -12,10 +12,9 @@ async def create_donation_crud(
         session: AsyncSession,
         user: User
 ) -> Donation:
-    new_donat_data = new_donat.dict()
     if user is not None:
-        new_donat_data['user_id'] = user.id
-    db_donat = Donation(**new_donat_data)
+        new_donat['user_id'] = user.id
+    db_donat = Donation(**new_donat)
     session.add(db_donat)
     await session.commit()
     await session.refresh(db_donat)
