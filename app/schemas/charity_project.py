@@ -35,7 +35,7 @@ class CharityProjectDB(CharityProjectBase):
     invested_amount: int
     fully_invested: bool
     create_date: datetime
-    close_date: Union[datetime, None]
+    # close_date: Union[datetime, None]
 
     class Config:
         orm_mode = True

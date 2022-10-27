@@ -3,15 +3,18 @@ from typing import List
 from sqlalchemy import select
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import Donation
+from app.models import Donation, User
 from app.schemas import DonationCreate
 
 
 async def create_donation_crud(
         new_donat: DonationCreate,
         session: AsyncSession,
+        user: User
 ) -> Donation:
     new_donat_data = new_donat.dict()
+    if user is not None:
+        new_donat_data['user_id'] = user.id
     db_donat = Donation(**new_donat_data)
     session.add(db_donat)
     await session.commit()
@@ -24,9 +27,10 @@ async def get_all_donat_crud(
 ) -> List[Donation]:
     db_donats = await session.execute(select(Donation))
     return db_donats.scalars().all()
-"""
+
+
 async def get_donats_by_user(
-        self, session: AsyncSession, user: User
+        session: AsyncSession, user: User
 ) -> List[Donation]:
     # Получаем объект класса Result.
     db_donats = await session.execute(
@@ -38,7 +42,7 @@ async def get_donats_by_user(
         )
     )
     return db_donats.scalars().all()
-"""
+
 
 
 

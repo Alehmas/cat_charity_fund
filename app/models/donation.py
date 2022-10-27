@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Boolean, Column, DateTime, Integer, String, Text
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, Text
 
 from app.core.db import Base
 
@@ -12,4 +12,4 @@ class Donation(Base):
     fully_invested = Column(Boolean, default=False)
     create_date = Column(DateTime, default=datetime.now())
     close_date = Column(DateTime, default=None)
-    # user_id = 
+    user_id = Column(Integer, ForeignKey('user.id'))

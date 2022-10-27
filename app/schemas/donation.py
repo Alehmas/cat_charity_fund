@@ -22,4 +22,4 @@ class DonationDB(DonationCreate):
 class DonationAllDB(DonationDB):
     fully_invested: bool
     close_date: Union[datetime, None]
-    # user_id
+    user_id: Optional[int]
