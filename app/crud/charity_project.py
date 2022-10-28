@@ -82,6 +82,9 @@ async def update_charity_project(
     # исключаем неустановленные пользователем поля.
     update_data = project_in.dict(exclude_unset=True)
     # Перебираем все ключи словаря, сформированного из БД-объекта.
+    if 'full_amount' in update_data:
+        if obj_data['invested_amount'] == update_data['full_amount']:
+            update_data['fully_invested '] = True
     for field in obj_data:
         # Если конкретное поле есть в словаре с данными из запроса, то...
         if field in update_data:

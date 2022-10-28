@@ -13,7 +13,7 @@ from app.services.services import add_donate_to_project
 router = APIRouter()
 
 
-@router.post('/', response_model=DonationCreate,)
+@router.post('/', response_model=DonationDB, response_model_exclude_none=True,)
 async def create_new_donation(
         donat: DonationCreate,
         session: AsyncSession = Depends(get_async_session),
@@ -34,7 +34,7 @@ async def get_all_donation(session: AsyncSession = Depends(get_async_session),):
 
 
 @router.get(
-    '/me', response_model=List[DonationDB], response_model_exclude={'user_id'})
+    '/my', response_model=List[DonationDB], response_model_exclude={'user_id'})
 async def read_all_my_donation(
         session: AsyncSession = Depends(get_async_session),
         user: User = Depends(current_user)):

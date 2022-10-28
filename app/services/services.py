@@ -23,12 +23,17 @@ async def add_free_donate(
         for donat in all_donate:
             full_donat = donat.full_amount
             invest_donat = donat.invested_amount
-            if invested_amount < full_amount:
-                if (full_donat - invest_donat) <= (full_amount - invested_amount):
+            if invested_amount <= full_amount:
+                if (full_donat - invest_donat) < (full_amount - invested_amount):
                     invested_amount += (full_donat - invest_donat)
                     donat.fully_invested = True
                     donat.invested_amount = full_donat
                     donat.close_date = datetime.now()
+                    if (full_donat - invest_donat) == (full_amount - invested_amount):
+                        update_data['fully_invested'] = True
+                        update_data['close_date'] = datetime.now()
+                        session.add(donat)
+                        break
                 else:
                     donat.invested_amount = (full_amount - invested_amount)
                     invested_amount = full_amount
@@ -63,6 +68,11 @@ async def add_donate_to_project(
                     project.fully_invested = True
                     project.invested_amount = full_project
                     project.close_date = datetime.now()
+                    if (full_project - invest_project) == (full_amount - invested_amount):
+                        update_data['fully_invested'] = True
+                        update_data['close_date'] = datetime.now()
+                        session.add(project)
+                        break
                 else:
                     project.invested_amount += (full_amount - invested_amount)
                     invested_amount = full_amount

@@ -6,7 +6,7 @@ from pydantic import BaseModel, Extra, Field
 
 class DonationCreate(BaseModel):
     comment: Optional[str] = Field(None, min_length=1)
-    full_amount: int = Field(1, gt=0)
+    full_amount: int = Field(..., gt=0)
 
     class Config:
         extra = Extra.forbid
@@ -15,11 +15,10 @@ class DonationCreate(BaseModel):
 
 class DonationDB(DonationCreate):
     id: int
-    invested_amount: int
     create_date: datetime
 
 
 class DonationAllDB(DonationDB):
     fully_invested: bool
-    close_date: Union[datetime, None]
+    invested_amount: int
     user_id: Optional[int]

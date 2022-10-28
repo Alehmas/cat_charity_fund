@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.validators import check_charity_project_exists, check_name_duplicate, check_charity_project_full
+from app.api.validators import check_charity_project_exists, check_name_dublicate, check_charity_project_full, check_invested_sum, check_charity_project_full_del
 from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud import (
@@ -21,7 +21,7 @@ async def create_new_project(
         project: CharityProjectCreate,
         session: AsyncSession = Depends(get_async_session),):
     """Только для суперюзеров."""
-    await check_name_duplicate(project.name, session)
+    await check_name_dublicate(project.name, session)
     new_project = await add_free_donate(project, session)
     new_project = await create_charity_project(new_project, session)
     return new_project
@@ -51,7 +51,8 @@ async def partially_update_charity_project(
     # В ответ ожидается либо None, либо объект класса MeetingRoom.
     project = await check_charity_project_exists(project_id, session)
     await check_charity_project_full(project_id, session)
-    await check_name_duplicate(obj_in.name, session)
+    await check_name_dublicate(obj_in.name, session)
+    await check_invested_sum(project_id, obj_in, session)
     # Передаём в корутину все необходимые для обновления данные.
     project = await update_charity_project(
         project, obj_in, session
@@ -71,6 +72,9 @@ async def remove_charity_project(
     """Только для суперюзеров."""
     project = await check_charity_project_exists(
         project_id, session
+    )
+    await check_charity_project_full_del(
+        project, session
     )
     project = await delete_charity_project(
         project, session
