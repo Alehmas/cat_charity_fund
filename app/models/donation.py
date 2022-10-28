@@ -13,8 +13,3 @@ class Donation(Base):
     create_date = Column(DateTime, default=datetime.now)
     close_date = Column(DateTime, default=None)
     user_id = Column(Integer, ForeignKey('user.id'))
-
-    def __repr__(self):
-        return (
-            f'Донат id={self.id} с full_amount= {self.full_amount} и invested_amount={self.invested_amount}'
-        )

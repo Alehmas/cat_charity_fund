@@ -17,7 +17,7 @@ class CharityProjectCreate(CharityProjectBase):
     pass
 
 
-class CharityProjectUpdate(CharityProjectBase):
+class CharityProjectUpdate(CharityProjectCreate):
     name: Optional[str] = Field(min_length=1, max_length=100)
     description: Optional[str] = Field(min_length=1)
     full_amount: Optional[int] = Field(gt=0)
@@ -29,7 +29,7 @@ class CharityProjectUpdate(CharityProjectBase):
         return value
 
 
-class CharityProjectDB(CharityProjectBase):
+class CharityProjectDB(CharityProjectCreate):
     id: int
     invested_amount: int
     fully_invested: bool
