@@ -1,19 +1,19 @@
 from datetime import datetime
 
-from sqlalchemy import select
+from sqlalchemy import select, not_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def add_donate_to_project(
         upgrade_model,
         new,
-        # donat_in: Donation,
         session: AsyncSession,
 ):
     """Функция распределения донатов по проектам"""
     all_upgrade = await session.execute(
         select(upgrade_model).where(
-            upgrade_model.fully_invested == 0
+            not_(
+                upgrade_model.fully_invested)
         )
     )
     all_upgrade = all_upgrade.scalars().all()
@@ -32,17 +32,13 @@ async def add_donate_to_project(
                     upgrade.fully_invested = True
                     upgrade.invested_amount = full_upgrade
                     upgrade.close_date = datetime.now()
-                    if balance_upgrade == balance_new:
-                        update_data['fully_invested'] = True
-                        update_data['close_date'] = datetime.now()
-                        session.add(upgrade)
-                        break
                 else:
                     upgrade.invested_amount += balance_new
                     invest_new = full_new
-                    update_data['fully_invested'] = True
-                    update_data['close_date'] = datetime.now()
-                    break
             session.add(upgrade)
-        update_data['invested_amount'] = invest_new
+            if full_new == invest_new:
+                update_data['fully_invested'] = True
+                update_data['close_date'] = datetime.now()
+                update_data['invested_amount'] = invest_new
+                break
     return update_data
