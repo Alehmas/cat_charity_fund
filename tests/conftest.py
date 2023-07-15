@@ -11,32 +11,32 @@ try:
     from app.main import app
 except (NameError, ImportError):
     raise AssertionError(
-        'Не обнаружен объект приложения `app`.'
-        'Проверьте и поправьте: он должен быть доступен в модуле `app.main`.',
+        'The application object `app` was not found.'
+        'Check and fix: it should be available in the `app.main` module.',
     )
 
 try:
     from app.core.db import Base, get_async_session
 except (NameError, ImportError):
     raise AssertionError(
-        'Не обнаружены объекты `Base, get_async_session`. '
-        'Проверьте и поправьте: они должны быть доступны в модуле `app.core.db`.',
+        'No `Base, get_async_session` objects found. '
+        'Check and fix: they should be available in the `app.core.db` module.',
     )
 
 try:
     from app.core.user import current_superuser, current_user
 except (NameError, ImportError):
     raise AssertionError(
-        'Не обнаружены объекты `current_superuser, current_user`.'
-        'Проверьте и поправьте: они должны быть доступны в модуле `app.code.user`',
+        'No `current_superuser, current_user` objects found.'
+        'Check and fix: they should be available in the `app.code.user` module',
     )
 
 try:
     from app.schemas.user import UserCreate
 except (NameError, ImportError):
     raise AssertionError(
-        'Не обнаружена схема создания пользователя UserCreate. '
-        'Проверьте и поправьте: она должна быть доступна в модуле `app.schemas.user`.',
+        'UserCreate schema not found. '
+        'Check and fix: it should be available in the `app.schemas.user` module.',
     )
 
 
