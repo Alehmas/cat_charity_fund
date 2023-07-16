@@ -25,7 +25,7 @@ class CharityProjectUpdate(CharityProjectCreate):
     @validator('name', 'description', 'full_amount')
     def name_cannot_be_null(cls, value):
         if value is None:
-            raise ValueError('Поле не может быть пустым!')
+            raise ValueError('The field cannot be empty!')
         return value
 
 

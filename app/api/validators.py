@@ -18,7 +18,7 @@ async def check_name_dublicate(
     if project_id is not None:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
-            detail='Проект с таким именем уже существует!',
+            detail='The project with that name already exists!',
         )
 
 
@@ -33,7 +33,7 @@ async def check_charity_project_exists(
     if charity_project is None:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
-            detail='Проект не найден!'
+            detail='Project not found!'
         )
     return charity_project
 
@@ -45,7 +45,7 @@ async def check_charity_project_full(
     if project.fully_invested == 1:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
-            detail='Закрытый проект нельзя редактировать!'
+            detail='A closed project cannot be edited!'
         )
 
 
@@ -56,7 +56,7 @@ async def check_charity_project_full_del(
     if project.fully_invested == 1 or project.invested_amount > 0:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
-            detail='В проект были внесены средства, не подлежит удалению!'
+            detail='Funds have been contributed to the project, cannot be removed!'
         )
 
 
@@ -68,5 +68,5 @@ async def check_invested_sum(
     if obj_in.full_amount and project.invested_amount > obj_in.full_amount:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
-            detail='Требуемая сумма должна быть больше внесеной!'
+            detail='The requested amount must be greater than the deposited!'
         )
