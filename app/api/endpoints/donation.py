@@ -19,7 +19,7 @@ async def create_new_donation(
         donat: DonationCreate,
         session: AsyncSession = Depends(get_async_session),
         user: User = Depends(current_user),) -> Donation:
-    """Сделать пожертвование."""
+    """Make a donation."""
     new_donat = await add_donate_to_project(
         new=donat, upgrade_model=CharityProject, session=session)
     new_donat = await donation_crud.create(new_donat, session, user)
@@ -33,7 +33,7 @@ async def create_new_donation(
 async def get_all_donation(
     session: AsyncSession = Depends(get_async_session)
 ) -> List[Donation]:
-    """Только для суперюзеров. Получает список всех пожертвований."""
+    """Superusers only. Gets a list of all donations."""
     all_donat = await donation_crud.get_multi(session)
     return all_donat
 
@@ -43,7 +43,7 @@ async def get_all_donation(
 async def read_all_my_donation(
         session: AsyncSession = Depends(get_async_session),
         user: User = Depends(current_user)) -> List[Donation]:
-    """Получить список моих пожертвований."""
+    """Get a list of my donations."""
     all_donat = await donation_crud.get_donats_by_user(
         session=session, user=user)
     return all_donat

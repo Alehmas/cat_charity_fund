@@ -28,8 +28,8 @@ async def create_new_project(
         project: CharityProjectCreate,
         session: AsyncSession = Depends(get_async_session),
 ) -> CharityProject:
-    """Только для суперюзеров.
-    Создает благотворительный проект."""
+    """Only for superusers.
+    Create a charity project."""
     await check_name_dublicate(project.name, session)
     new_project = await add_donate_to_project(
         new=project, upgrade_model=Donation, session=session)
@@ -43,7 +43,7 @@ async def create_new_project(
 async def get_all_project(
         session: AsyncSession = Depends(get_async_session),
 ) -> List[CharityProject]:
-    """Получает список всех проектов."""
+    """Get a list of all projects."""
     return await charity_project_crud.get_multi(session)
 
 
@@ -57,8 +57,9 @@ async def partially_update_charity_project(
         obj_in: CharityProjectUpdate,
         session: AsyncSession = Depends(get_async_session),
 ) -> CharityProject:
-    """Только для суперюзеров. Закрытый проект нельзя редактировать,
-    также нельзя установить требуемую сумму меньше уже вложенной."""
+    """Superusers only. A closed project cannot be edited,
+    it is also impossible to set the required amount less
+    than the already invested."""
     project = await check_charity_project_exists(project_id, session)
     await check_charity_project_full(project)
     await check_name_dublicate(obj_in.name, session)
@@ -78,9 +79,9 @@ async def remove_charity_project(
         project_id: int,
         session: AsyncSession = Depends(get_async_session),
 ) -> CharityProject:
-    """Только для суперюзеров.Удаляет проект.
-    Нельзя удалить проект, в который уже были инвестированы средства,
-    его можно только закрыть."""
+    """Superusers only. Deletes the project.
+    You cannot delete a project in which funds have already been invested,
+    it can only be closed."""
     project = await check_charity_project_exists(project_id, session)
     await check_charity_project_full_del(project)
     project = await charity_project_crud.delete_charity_project(

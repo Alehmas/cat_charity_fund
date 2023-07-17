@@ -28,7 +28,7 @@ router.include_router(
     deprecated=True
 )
 def delete_user(id: str):
-    """Не используйте удаление, деактивируйте пользователей."""
+    """Don't use delete, deactivate users."""
     raise HTTPException(
         status_code=405,
         detail="Deleting users is prohibited!"
