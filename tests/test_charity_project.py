@@ -577,7 +577,7 @@ def test_delete_charity_project_already_invested(superuser_client, charity_proje
         'Deleting projects that have already been funded should be prohibited. '
         'The status-code of the response is different than expected.'
     )
-    assert response.json()['detail'] == 'Funds have been contributed to the project, cannot be removed!', (
+    assert response.json()['detail'] == 'Funds contributed to the project, can`t be removed!', (
         'Deleting projects that have already been funded should be prohibited. '
         'Response body is different than expected.'
     )
@@ -589,7 +589,7 @@ def test_delete_charity_project_already_closed(superuser_client, closed_charity_
         'Deleting closed projects should be prohibited. '
         'The status-code of the response is different than expected.'
     )
-    assert response.json()['detail'] == 'Funds have been contributed to the project, cannot be removed!', (
+    assert response.json()['detail'] == 'Funds contributed to the project, can`t be removed!', (
         'Deleting closed projects should be prohibited. '
         'Response body is different than expected.'
     )

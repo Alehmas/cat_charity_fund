@@ -7,6 +7,7 @@ from app.models import User
 
 
 class CRUDBase:
+    """Base class with a set of common methods for models."""
 
     def __init__(self, model):
         self.model = model
@@ -15,6 +16,7 @@ class CRUDBase:
             self,
             session: AsyncSession
     ):
+        """Get all objects of the given class."""
         db_objs = await session.execute(select(self.model))
         return db_objs.scalars().all()
 
@@ -24,6 +26,7 @@ class CRUDBase:
             session: AsyncSession,
             user: Optional[User] = None
     ):
+        """Create a new object of the given class."""
         if user is not None:
             obj_in['user_id'] = user.id
         db_obj = self.model(**obj_in)

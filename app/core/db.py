@@ -8,6 +8,7 @@ from app.core.config import settings
 
 
 class PreBase:
+    """Base class for all models."""
 
     @declared_attr
     def __tablename__(cls):
@@ -18,6 +19,7 @@ class PreBase:
 
 @declarative_mixin
 class BaseCharityMixin:
+    """Abstract class with common fields for models."""
     full_amount = Column(Integer)
     invested_amount = Column(Integer, default=0)
     fully_invested = Column(Boolean, default=False)
@@ -33,5 +35,6 @@ AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession)
 
 
 async def get_async_session():
+    """Open and close a session."""
     async with AsyncSessionLocal() as async_session:
         yield async_session

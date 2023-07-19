@@ -12,7 +12,7 @@ class CRUDDonation(CRUDBase):
     async def get_donats_by_user(
             self, session: AsyncSession, user: User
     ) -> List[Donation]:
-        """"Функция получения всех донатов конкретного пользователя"""
+        """"Get all donations from individual users."""
         db_donats = await session.execute(
             select(Donation).where(
                 Donation.user_id == user.id

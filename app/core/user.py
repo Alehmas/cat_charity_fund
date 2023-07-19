@@ -17,12 +17,14 @@ from app.schemas.user import UserCreate
 
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
+    """Provide database access via SQLAlchemy."""
     yield SQLAlchemyUserDatabase(session, User)
 
 bearer_transport = BearerTransport(tokenUrl='auth/jwt/login')
 
 
 def get_jwt_strategy() -> JWTStrategy:
+    """Define the strategy: storing the token as a JWT."""
     return JWTStrategy(secret=settings.secret, lifetime_seconds=3600)
 
 
@@ -34,6 +36,8 @@ auth_backend = AuthenticationBackend(
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
+    """The main user processing logic."""
+
     async def validate_password(
         self,
         password: str,
@@ -51,7 +55,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     async def on_after_register(
             self, user: User, request: Optional[Request] = None
     ):
-        print(f'Пользователь {user.email} зарегистрирован.')
+        print(f'User {user.email} is registered.')
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):

@@ -16,7 +16,7 @@ class CRUDCharityProject(CRUDBase):
             project_name: str,
             session: AsyncSession,
     ) -> Optional[int]:
-        """"Функция получения проекта из БД по имени"""
+        """"Get a project from the database by name."""
         db_project_id = await session.execute(
             select(CharityProject.id).where(
                 CharityProject.name == project_name
@@ -30,7 +30,7 @@ class CRUDCharityProject(CRUDBase):
             project_id: int,
             session: AsyncSession,
     ) -> Optional[CharityProject]:
-        """"Функция получения проекта из БД по id"""
+        """"Get a project from the database by id."""
         db_project = await session.execute(
             select(CharityProject).where(
                 CharityProject.id == project_id
@@ -45,7 +45,7 @@ class CRUDCharityProject(CRUDBase):
             project_in: CharityProjectUpdate,
             session: AsyncSession,
     ) -> CharityProject:
-        """"Функция обновления проекта в БД"""
+        """"Update the project in the database."""
         obj_data = jsonable_encoder(db_project)
         update_data = project_in.dict(exclude_unset=True)
         if 'full_amount' in update_data:
@@ -64,7 +64,7 @@ class CRUDCharityProject(CRUDBase):
             db_project: CharityProject,
             session: AsyncSession,
     ) -> CharityProject:
-        """"Функция удаления проекта из БД"""
+        """"Delete a project from the database."""
         await session.delete(db_project)
         await session.commit()
         return db_project
