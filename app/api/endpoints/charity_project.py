@@ -57,9 +57,10 @@ async def partially_update_charity_project(
         obj_in: CharityProjectUpdate,
         session: AsyncSession = Depends(get_async_session),
 ) -> CharityProject:
-    """Superusers only. A closed project cannot be edited,
-    it is also impossible to set the required amount less
-    than the already invested."""
+    """Superusers only. Update project.
+    A closed project cannot be edited, it is also impossible to set the
+    required amount less than the already invested."""
+
     project = await check_charity_project_exists(project_id, session)
     await check_charity_project_full(project)
     await check_name_dublicate(obj_in.name, session)
@@ -79,9 +80,10 @@ async def remove_charity_project(
         project_id: int,
         session: AsyncSession = Depends(get_async_session),
 ) -> CharityProject:
-    """Superusers only. Deletes the project.
+    """Superusers only. Delete the project.
     You cannot delete a project in which funds have already been invested,
     it can only be closed."""
+
     project = await check_charity_project_exists(project_id, session)
     await check_charity_project_full_del(project)
     project = await charity_project_crud.delete_charity_project(

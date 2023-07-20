@@ -1,88 +1,88 @@
 #  QRKot
 
-##  Описание
-QRKot - приложение для Благотворительного фонда. 
+##  Description
+QRKot is an application for the Charitable Foundation for supporting Cats.
 
-###  Проекты(CharityProject)
-В Фонде QRKot может быть открыто несколько целевых проектов. У каждого проекта
-есть название, описание и сумма, которую планируется собрать. После того, как
-нужная сумма собрана — проект закрывается. Пожертвования в проекты поступают по
-принципу First In, First Out: все пожертвования идут в проект, открытый раньше других;
-когда этот проект набирает необходимую сумму и закрывается — пожертвования начинают
-поступать в следующий проект.
+The Foundation collects donations for various targeted projects: for medical care
+needy caudates, for the arrangement of a cat colony in the basement, for food for the remaining
+without care for cats - for any purpose related to the support of the cat population.
 
-### Пожертвования(Donation)
-Каждый пользователь может сделать пожертвование и сопроводить его комментарием.
-Пожертвования не целевые: они вносятся в фонд, а не в конкретный проект.
-Каждое полученное пожертвование автоматически добавляется в первый открытый проект,
-который ещё не набрал нужную сумму. Если пожертвование больше нужной суммы
-или же в Фонде нет открытых проектов — оставшиеся деньги ждут открытия следующего проекта.
-При создании нового проекта все неинвестированные пожертвования автоматически
-вкладываются в новый проект.
+###  Projects
+Several target projects can be opened in the QRKot Foundation. Each project
+there is a name, description and the amount that is planned to be collected. After
+The required amount is collected - the project is closed. Donations to projects come from
+the principle of First In, First Out: all donations go to the project opened earlier than others;
+when this project collects the required amount and closes, donations begin
+enter the next project.
 
-### Пользователи
-Целевые проекты создаются администраторами сайта.
-Любой пользователь может видеть список всех проектов, включая требуемые и уже внесенные суммы.
-Это касается всех проектов — и открытых, и закрытых.
-Зарегистрированные пользователи могут отправлять пожертвования и
-просматривать список своих пожертвований.
+### Donations
+Each user can make a donation and accompany it with a comment.
+Donations are not targeted: they are made to the fund, and not to a specific project.
+Each donation received is automatically added to the first open project, who has not yet collected
+the required amount. If the donation is more than the required amount or there are no open projects
+in the Fund - the remaining money is waiting for the opening of the next project.
+When creating a new project, all uninvested donations are automatically invest in a new project.
 
-Суперпользователь может:
-- создавать проекты,
-- удалять проекты, в которые не было внесено средств,
-- изменять название и описание существующего проекта, устанавливать для него новую
-  требуемую сумму (но не меньше уже внесённой).
+### Users
+Target projects are created by site administrators.
+Any user can see a list of all projects, including required and already contributed amounts.
+This applies to all projects, both open and closed.
+Registered users can send donations and
+view a list of your donations.
 
-## Подготовка и запуск проекта
-**Шаг 1** Склонируйте репозиторий на локальную машину:
+The superuser can:
+- create projects
+- delete projects that have not been funded,
+- change the name and description of an existing project, set a new one for it
+  the required amount (but not less than the amount already paid).
+
+## Technologies used
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![FastAPI](https://img.shields.io/badge/Fastapi-009688?style=for-the-badge&logo=fastapi&logoColor=white) ![SQlite](https://img.shields.io/badge/SQLite-003b57?style=for-the-badge&logo=sqlite&logoColor=white) ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-6d8a7f?style=for-the-badge)
+
+## Preparation and launch of the project
+**Step 1** Clone the repository on your local machine:
 ```bash
-git@github.com:Oleg-2006/cat_charity_fund.git
+git clone git@github.com:Alehmas/cat_charity_fund.git
 ```
 
-**Шаг 2** Перейти в новую директорию. Инициализировать и активировать виртуальное окружение
+**Step 2** Change to a new directory. Initialize and activate the virtual environment
 ```bash
 cd cat_charity_fund/
 python -m venv venv
 source venv/Scripts/activate
 ```
 
-**Шаг 3** Обновить pip и установить зависимости проекта
+**Step 3** Update pip and install project dependencies
 ```bash
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-**Шаг 4** Добавьте .env файл:
+**Step 4** Add .env file:
 ```
-APP_TITLE=Приложение QRKot
-APP_DESCRIPTION=Приложение для Благотворительного фонда поддержки котиков
+APP_TITLE=QRKot App
+APP_DESCRIPTION=Application for the Cat Charitable Foundation
 DATABASE_URL=sqlite+aiosqlite:///./fastapi.db
 SECRET=<SECRET>
 FIRST_SUPERUSER_EMAIL=<FIRST_SUPERUSER_EMAIL>
 FIRST_SUPERUSER_PASSWORD=<FIRST_SUPERUSER_PASSWORD>
 ```
+*The .env file in the repository is provided as an example*
 
-**Шаг 5** По необходимости создать и применить миграции
+**Step 5** Create and apply migrations as needed
 ```bash
 alembic revision --autogenerate -m "First migration" 
 alembic upgrade head
 ```
 
-**Шаг 6** Запустить приложение
+**Step 6** Launch the application
 ```bash
 uvicorn app.main:app --reload
 ```
 
-##  Используемые технологии
-- проект написан на Python с использованием FastAPI
-- для управления пользователями FastAPI Users
-- базы данны SQLite с изпользованием SQLAlchemy
-- ASGI-сервера для запуска FastAPI  - Uvicorn
-- для асинхронного подключения к SQLite - драйвер aiosqlite
-- тестирование кода проекта pytest
+## Request examples
+Examples of requests, access rights, possible answers are available in the link to the projects [documentation](http://127.0.0.1:8000/docs)
 
-## Примеры запросов
-Примеры запросов, права доступа, возможные ответы доступны в подключенной к проекту [документации](http://127.0.0.1:8000/docs)
-
-## Авторы
-- [Олег Маслов](https://github.com/Oleg-2006)
+## Authors
+- [Aleh Maslau](https://github.com/Alehmas)

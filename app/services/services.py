@@ -9,7 +9,7 @@ async def add_donate_to_project(
         new,
         session: AsyncSession,
 ):
-    """Функция распределения донатов по проектам"""
+    """Distribute donations for charitable projects."""
     all_upgrade = await session.execute(
         select(upgrade_model).where(
             not_(
